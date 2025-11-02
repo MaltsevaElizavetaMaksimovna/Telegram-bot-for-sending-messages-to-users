@@ -1,41 +1,44 @@
+import threading
+import schedule
+import time
+from datetime import datetime
 from bot.bot import Bot
 from bot.handler import MessageHandler
-import io
-import datetime
-import logging
-import schedule
-import requests
+
+# === Настройки ===
 TOKEN = "001.2190967850.0383199263:1011970881"
+CHAT_IDS = ["n.lyzunenko@test-123645965336.bizml.ru", "AoLJrsA6x1EdRf3xNm4"]
 
-bot = Bot(token=TOKEN)
-url = "https://i.pinimg.com/736x/d4/38/c3/d438c31d0caf10b0dc17a5fcb503a38e.jpg"
-response = requests.get(url)
+bot = Bot(token=TOKEN, is_myteam=True)
 
-if response.status_code == 200:
-    # Создаем файлоподобный объект из байтов
-    photo = io.BytesIO(response.content)
-    photo.name = "image.jpg"  # Указываем имя файла
-else:
-    print("Ошибка загрузки изображения")
+# === Функция для отправки сообщений ===
+def send_day_of_week():
+    day = datetime.now().strftime("%A")  # например, "Monday"
+    text = f"Сегодня {day}"
+    for chat_id in CHAT_IDS:
+        bot.send_text(chat_id=chat_id, text=text)
+    print(f"[{datetime.now()}] Сообщения отправлены")
 
-def message_cb(bot, event):
-    msg = "err"
-    if event.text == "time":
-        url = "https://i.pinimg.com/736x/d4/38/c3/d438c31d0caf10b0dc17a5fcb503a38e.jpg"
-        response = requests.get(url)
+# === Планировщик ===
+schedule.every().day.at("09:00").do(send_day_of_week)
 
-        if response.status_code == 200:
-            # Создаем файлоподобный объект из байтов
-            photo = io.BytesIO(response.content)
-            photo.name = "image.jpg"  # Указываем имя файла
-        else:
-            print("Ошибка загрузки изображения")
-        msg = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p");
-        bot.send_file(chat_id="AoLJrsA6x1EdRf3xNm4", file=photo)
-    print(str(event.data) + " send: " + event.text + ", answer: " + msg)
+def schedule_loop():
+    while True:
+        schedule.run_pending()
+        time.sleep(30)
 
-bot.dispatcher.add_handler(MessageHandler(callback=message_cb))
+# === Обработчик /ping ===
+def on_message(bot, event):
+    text = event.text.lower().strip()
+    if text == "/ping":
+        bot.send_text(chat_id=event.from_chat, text="Бот активен!")
+
+# Регистрируем обработчик сообщений
+bot.dispatcher.add_handler(MessageHandler(callback=on_message))
+
+# Запускаем планировщик в отдельном потоке
+threading.Thread(target=schedule_loop, daemon=True).start()
+
+# === Основной цикл бота ===
 bot.start_polling()
 bot.idle()
-
-
