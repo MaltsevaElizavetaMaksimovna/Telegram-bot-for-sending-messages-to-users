@@ -1,0 +1,15 @@
+cached-property==1.5.2
+certifi==2025.10.5
+charset-normalizer==2.0.12
+click==8.0.3
+colorama==0.4.6
+expiringdict==1.2.1
+gTTS==2.2.3
+idna==3.11
+mailru-im-bot==0.0.21
+monotonic==1.6
+python-baseconv==1.2.2
+requests==2.26.0
+schedule==1.2.2
+six==1.16.0
+urllib3==1.26.7
