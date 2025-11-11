@@ -16,7 +16,7 @@ IMAGE_URL = "https://avatars.mds.yandex.net/i?id=4f96f81da698c2c99f8678569594ea6
 bot = Bot(token=TOKEN, is_myteam=True)
 
 # === Функция для отправки сообщений ===
-def send_day_of_week():ь
+def send_day_of_week():
     day = datetime.now().strftime("%A")  # "Monday" и т.п.
     caption = f"Сегодня {day}"
     for chat_id in CHAT_IDS:
