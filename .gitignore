@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+ENV/
+
+# IDE / Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.log
+*.tmp
+
+# Database
+instance/
+*.db
+*.sqlite
+
+# Environment variables (except env_s)
+.env
+.env.local
+.env.*.local
+
+# Certificates (не коммитим!)
+localhost+2.pem
+localhost+2-key.pem
+
+# Tools
+mkcert-v1.4.4-linux-amd64
+
+# Logs and temp files
+logs/
+*.log
+*.tmp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Optional: ignore .gitignore itself if you want to keep it clean (но обычно не нужно)
